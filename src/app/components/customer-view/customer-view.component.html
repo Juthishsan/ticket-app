@@ -1,0 +1,55 @@
+<div class="container fade-in" style="padding-top: 2rem; padding-bottom: 2rem;">
+  <div class="form-header">
+    <h1>Raise a Ticket</h1>
+    <p>Describe your issue and we'll get right on it.</p>
+  </div>
+
+  <div class="card ticket-form-card">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" [(ngModel)]="customerName" placeholder="e.g. John Doe">
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" [(ngModel)]="email" placeholder="john@example.com">
+    </div>
+
+    <div class="form-group">
+      <label for="title">Issue Title</label>
+      <input type="text" id="title" [(ngModel)]="title" placeholder="Brief summary of the issue">
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" rows="5" [(ngModel)]="description" placeholder="Detailed explanation..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Attachments (Images)</label>
+      <div class="file-upload-wrapper">
+        <input type="file" (change)="onFileSelected($event)" multiple accept="image/*" id="file-upload" class="file-input">
+        <label for="file-upload" class="file-label">
+          <span>+ Add Images</span>
+        </label>
+      </div>
+      
+      <div class="image-previews" *ngIf="images.length > 0">
+        <div class="preview-item" *ngFor="let img of images; let i = index">
+          <img [src]="img" alt="Preview">
+          <button class="remove-btn" (click)="removeImage(i)">×</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" (click)="submitTicket()" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Submitting...' : 'Submit Ticket' }}
+      </button>
+    </div>
+
+    <div class="success-message" *ngIf="successMessage()">
+      {{ successMessage() }}
+    </div>
+  </div>
+</div>

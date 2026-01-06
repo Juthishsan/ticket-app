@@ -1,0 +1,59 @@
+<div class="container fade-in" style="padding-top: 2rem;">
+  <div class="header">
+    <h1>All Tickets</h1>
+    <div class="stats">
+      <span class="stat-badge open">Open: {{ openCount() }}</span>
+      <span class="stat-badge resolved">Resolved: {{ resolvedCount() }}</span>
+    </div>
+  </div>
+
+  <div class="ticket-list">
+    <div class="empty-state" *ngIf="tickets().length === 0">
+      <p>No tickets raised yet.</p>
+    </div>
+
+    <div 
+      class="ticket-card card" 
+      *ngFor="let ticket of tickets()" 
+      [class.expanded]="expandedTicketId === ticket.id"
+      (click)="toggleExpand(ticket.id)"
+    >
+      <div class="ticket-header">
+        <div class="ticket-main-info">
+          <span class="ticket-id">#{{ ticket.id.slice(0, 8) }}</span>
+          <h3 class="ticket-title">{{ ticket.title }}</h3>
+          <span class="ticket-date">{{ ticket.createdAt | date:'mediumDate' }}</span>
+        </div>
+        <div class="ticket-status">
+          <span class="status-badge" [ngClass]="ticket.status.toLowerCase().replace(' ', '-')">
+            {{ ticket.status }}
+          </span>
+          
+          <div class="status-actions" *ngIf="expandedTicketId === ticket.id">
+            <button class="action-btn open" (click)="updateStatus(ticket.id, 'Open', $event)">Open</button>
+            <button class="action-btn progress" (click)="updateStatus(ticket.id, 'In Progress', $event)">In Progress</button>
+            <button class="action-btn resolved" (click)="updateStatus(ticket.id, 'Resolved', $event)">Resolved</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket-details" *ngIf="expandedTicketId === ticket.id">
+        <div class="detail-row">
+          <span class="label">Customer:</span>
+          <span>{{ ticket.customerName }} (<a [href]="'mailto:' + ticket.email">{{ ticket.email }}</a>)</span>
+        </div>
+        <div class="detail-row description">
+          <span class="label">Description:</span>
+          <p>{{ ticket.description }}</p>
+        </div>
+        
+        <div class="attachments" *ngIf="ticket.images && ticket.images.length > 0">
+          <span class="label">Attachments:</span>
+          <div class="image-grid">
+            <img *ngFor="let img of ticket.images" [src]="img" alt="Attachment">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
