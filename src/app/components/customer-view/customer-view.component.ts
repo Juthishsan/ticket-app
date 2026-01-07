@@ -50,8 +50,8 @@ export class CustomerViewComponent {
     this.isSubmitting.set(true);
     
     // Simulate delay for effect
-    setTimeout(() => {
-      const newId = this.ticketService.createTicket({
+    setTimeout(async () => {
+      const newId = await this.ticketService.createTicket({
         customerName: this.customerName,
         email: this.email,
         title: this.title,
