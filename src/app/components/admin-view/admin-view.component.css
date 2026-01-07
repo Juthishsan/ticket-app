@@ -64,7 +64,7 @@
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .ticket-status {
     width: 100%;
     flex-direction: row;
@@ -113,17 +113,20 @@
 }
 
 .status-badge.open {
-  background-color: rgba(239, 68, 68, 0.1); /* Red */
+  background-color: rgba(239, 68, 68, 0.1);
+  /* Red */
   color: #ef4444;
 }
 
 .status-badge.in-progress {
-  background-color: rgba(245, 158, 11, 0.1); /* Amber */
+  background-color: rgba(245, 158, 11, 0.1);
+  /* Amber */
   color: #f59e0b;
 }
 
 .status-badge.resolved {
-  background-color: rgba(16, 185, 129, 0.1); /* Green */
+  background-color: rgba(16, 185, 129, 0.1);
+  /* Green */
   color: #10b981;
 }
 
@@ -148,9 +151,20 @@
   background-color: var(--bg-dark);
 }
 
-.action-btn.open:hover { color: #ef4444; border-color: #ef4444; }
-.action-btn.progress:hover { color: #f59e0b; border-color: #f59e0b; }
-.action-btn.resolved:hover { color: #10b981; border-color: #10b981; }
+.action-btn.open:hover {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.action-btn.progress:hover {
+  color: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.action-btn.resolved:hover {
+  color: #10b981;
+  border-color: #10b981;
+}
 
 .ticket-details {
   margin-top: 1.5rem;
@@ -235,7 +249,7 @@
     max-width: 90%;
     font-size: 0.85rem;
   }
-  
+
   .messages-list {
     max-height: 250px;
   }
@@ -276,6 +290,16 @@
 .chat-input-area {
   display: flex;
   gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .chat-input-area {
+    flex-direction: column;
+  }
+
+  .chat-input-area .send-btn {
+    width: 100%;
+  }
 }
 
 .chat-input-area textarea {

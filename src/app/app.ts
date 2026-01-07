@@ -11,7 +11,7 @@ import { AuthService } from './services/auth.service';
 export class App {
   private authService = inject(AuthService);
   protected readonly title = signal('ticket-app');
-  
+
   isAuthenticated = this.authService.isAuthenticated;
 
   logout() {
