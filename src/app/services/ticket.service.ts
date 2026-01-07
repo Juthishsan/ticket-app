@@ -13,14 +13,26 @@ export class TicketService {
   // Signals for reactivity
   tickets = signal<Ticket[]>([]);
 
+  // Hardcoded User for Portal Simulation
+  readonly MOCK_USER = {
+    name: 'Portal User',
+    email: 'user@portal.com'
+  };
+
   constructor() {
-    this.loadTickets();
+    // Initial load: don't load everything automatically anymore, 
+    // components will request what they need.
   }
 
-  // Load all tickets (initial load + refresh)
-  async loadTickets() {
+  // Load tickets (Admin gets all, Customer gets filtered)
+  async loadTickets(email?: string) {
     try {
-      const data = await firstValueFrom(this.http.get<Ticket[]>(this.API_URL));
+      let url = this.API_URL;
+      if (email) {
+        url += `?email=${encodeURIComponent(email)}`;
+      }
+      
+      const data = await firstValueFrom(this.http.get<Ticket[]>(url));
       this.tickets.set(data);
     } catch (e) {
       console.error('Failed to load tickets from API', e);

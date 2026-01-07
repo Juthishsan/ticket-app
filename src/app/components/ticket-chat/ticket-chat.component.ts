@@ -21,6 +21,7 @@ export class TicketChatComponent {
   trackedId = signal('');
 
   // Computed property to find the ticket reactively
+  // We search within loaded tickets which are already filtered by user
   activeTicket = computed(() => {
     const id = this.trackedId();
     if (!id) return undefined;
@@ -28,43 +29,29 @@ export class TicketChatComponent {
   });
 
   newMessage = '';
-  errorMsg = signal('');
-
-  tickets = this.ticketService.tickets;
+  // Expose tickets signal directly to template as 'myTickets'
+  myTickets = this.ticketService.tickets;
 
   constructor() {
-    // Optional: if id is passed in query params
+    // Load this user's tickets immediately
+    this.ticketService.loadTickets(this.ticketService.MOCK_USER.email);
+
+    // Check params to see if we linked from success page
     this.route.queryParams.subscribe(params => {
       if (params['id']) {
-        this.ticketIdInput = params['id'];
-        this.loadTicket();
+        this.trackedId.set(params['id']);
       }
     });
   }
 
-  loadTicket() {
-    this.errorMsg.set('');
-    if (!this.ticketIdInput.trim()) return;
-
-    // Check if it exists first
-    const exists = this.ticketService.getTicketById(this.ticketIdInput.trim());
-    if (exists) {
-      this.trackedId.set(this.ticketIdInput.trim());
-    } else {
-      this.trackedId.set('');
-      this.errorMsg.set('Ticket not found. Please check the ID.');
-    }
-  }
-
-  selectTicket(id: string) {
-    this.ticketIdInput = id;
-    this.loadTicket();
+  viewTicket(id: string) {
+    this.trackedId.set(id);
   }
 
   resetView() {
-    this.ticketIdInput = '';
     this.trackedId.set('');
-    this.errorMsg.set('');
+    // Refresh list
+    this.ticketService.loadTickets(this.ticketService.MOCK_USER.email);
   }
 
   sendMessage() {

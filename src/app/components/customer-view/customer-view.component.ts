@@ -22,7 +22,11 @@ export class CustomerViewComponent {
   successMessage = signal('');
   createdTicketId = signal(''); // Store the ID of the newly created ticket
 
-  constructor(private ticketService: TicketService, private router: Router) {}
+  constructor(private ticketService: TicketService, private router: Router) {
+    // Pre-fill with Hardcoded User
+    this.customerName = this.ticketService.MOCK_USER.name;
+    this.email = this.ticketService.MOCK_USER.email;
+  }
 
   onFileSelected(event: any) {
     const files = event.target.files;

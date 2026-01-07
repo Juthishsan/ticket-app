@@ -5,8 +5,10 @@ import { LoginComponent } from './components/login/login.component';
 import { TicketChatComponent } from './components/ticket-chat/ticket-chat.component';
 import { authGuard } from './guards/auth.guard';
 
+import { RoleSelectionComponent } from './components/role-selection/role-selection.component';
+
 export const routes: Routes = [
-  { path: '', redirectTo: 'customer', pathMatch: 'full' },
+  { path: '', component: RoleSelectionComponent },
   { path: 'customer', component: CustomerViewComponent },
   { path: 'track', component: TicketChatComponent },
   { path: 'login', component: LoginComponent },

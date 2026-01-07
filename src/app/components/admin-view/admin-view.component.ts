@@ -23,8 +23,11 @@ export class AdminViewComponent {
 
   expandedTicketId: string | null = null;
   newMessage = '';
-
-  // Removed redundant constructor logic since inject() is used above
+  
+  constructor() {
+    // Admin needs to see ALL tickets, so we call loadTickets without arguments
+    this.ticketService.loadTickets(); 
+  }
 
   toggleExpand(id: string) {
     this.expandedTicketId = this.expandedTicketId === id ? null : id;

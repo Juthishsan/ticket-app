@@ -17,13 +17,16 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Routes
 app.get('/', (req, res) => {
-  res.send('✅ Ticket App API is running!');
+  res.send('Ticket App API is running!');
 });
 
-// 1. Get all tickets (for Admin)
+// 1. Get all tickets (for Admin) OR Filter by Email (for Customer)
 app.get('/api/tickets', async (req, res) => {
   try {
-    const tickets = await Ticket.find().sort({ createdAt: -1 });
+    const { email } = req.query;
+    const query = email ? { email } : {};
+    
+    const tickets = await Ticket.find(query).sort({ createdAt: -1 });
     res.json(tickets);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -45,12 +48,6 @@ app.get('/api/tickets/:id', async (req, res) => {
 // 3. Create Ticket
 app.post('/api/tickets', async (req, res) => {
   try {
-    // We expect the frontend to generate the UUID, OR we can do it here.
-    // The previous code generated it in the service. Let's keep that logic or accept it.
-    // Actually, Mongoose can create it, but to keep the frontend 'createTicket' return value sync without awaiting, 
-    // the frontend generated it.
-    // However, for a real API, the server sends back the ID.
-    // Let's stick to the Payload: the frontend sends everything including the ID.
 
     const newTicket = new Ticket(req.body);
     await newTicket.save();
@@ -98,5 +95,5 @@ app.post('/api/tickets/:id/messages', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

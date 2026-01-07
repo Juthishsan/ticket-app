@@ -1,39 +1,40 @@
 <div class="container fade-in" style="padding-top: 2rem;">
-
-  <!-- Search Section -->
-  <div class="search-card card" *ngIf="!activeTicket()">
-    <h2>Track Your Ticket</h2>
-    <p class="subtitle">Enter your Ticket ID to view status and chat with support.</p>
-
-    <div class="search-box">
-      <input type="text" [(ngModel)]="ticketIdInput" placeholder="Enter Ticket ID (e.g. 550e8400-...)">
-      <button class="btn btn-primary" (click)="loadTicket()">Track</button>
-    </div>
-    <p class="error" *ngIf="errorMsg()">{{ errorMsg() }}</p>
+  
+  <!-- My Tickets Header -->
+  <div class="header-section" *ngIf="!activeTicket()">
+    <h2>My Tickets</h2>
+    <p class="subtitle">View and track all your support requests</p>
   </div>
 
-  <!-- Recent Tickets List -->
-  <div class="tickets-list-section" *ngIf="!activeTicket() && tickets().length > 0">
-    <h3>Existing Tickets</h3>
-    <div class="ticket-list">
-      <div class="ticket-preview-card" *ngFor="let t of tickets()" (click)="selectTicket(t.id)">
-        <div class="preview-header">
-          <span class="preview-id">#{{ t.id.slice(0, 6) }}</span>
-          <span class="preview-status" [ngClass]="t.status.toLowerCase().replace(' ', '-')">{{ t.status }}</span>
-        </div>
-        <h4 class="preview-title">{{ t.title }}</h4>
-        <div class="preview-meta">
-          <span>{{ t.customerName }}</span>
-          <span>•</span>
-          <span>{{ t.createdAt | date:'shortDate' }}</span>
-        </div>
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!activeTicket() && myTickets().length === 0">
+    <div class="empty-icon">🎫</div>
+    <h3>No tickets found</h3>
+    <p>You haven't raised any tickets yet.</p>
+    <a routerLink="/customer" class="btn btn-primary">Raise a Ticket</a>
+  </div>
+
+  <!-- Tickets List Grid -->
+  <div class="tickets-grid" *ngIf="!activeTicket() && myTickets().length > 0">
+    <div class="ticket-card" *ngFor="let t of myTickets()" (click)="viewTicket(t.id)">
+      <div class="card-header">
+        <span class="ticket-id">#{{ t.id.slice(0, 8) }}</span>
+        <span class="status-badge" [ngClass]="t.status.toLowerCase().replace(' ', '-')">{{ t.status }}</span>
+      </div>
+      
+      <h3>{{ t.title }}</h3>
+      <p class="ticket-desc">{{ t.description | slice:0:100 }}{{ t.description.length > 100 ? '...' : '' }}</p>
+      
+      <div class="card-footer">
+        <span class="date">{{ t.createdAt | date:'mediumDate' }}</span>
+        <span class="msg-count">💬 {{ t.messages.length }} messages</span>
       </div>
     </div>
   </div>
 
   <!-- Chat Interface -->
   <div class="chat-layout" *ngIf="activeTicket()">
-
+    
     <!-- Ticket Info Sidebar -->
     <div class="ticket-info card">
       <div class="info-header">
@@ -42,7 +43,7 @@
           {{ activeTicket()!.status }}
         </span>
       </div>
-
+      
       <div class="info-row">
         <label>ID:</label>
         <span>{{ activeTicket()!.id.slice(0, 8) }}...</span>
@@ -55,7 +56,7 @@
         <label>Description:</label>
         <p>{{ activeTicket()!.description }}</p>
       </div>
-
+      
       <button class="btn btn-secondary close-btn" (click)="resetView()">
         &larr; Check Another
       </button>
@@ -64,11 +65,15 @@
     <!-- Chat Area -->
     <div class="chat-area card">
       <div class="messages-list">
-        <div class="message-bubble" *ngFor="let msg of activeTicket()!.messages" [ngClass]="{
+        <div 
+          class="message-bubble" 
+          *ngFor="let msg of activeTicket()!.messages"
+          [ngClass]="{
             'customer-msg': msg.sender === 'customer',
             'admin-msg': msg.sender === 'admin',
             'system-msg': msg.sender === 'system'
-          }">
+          }"
+        >
           <div class="msg-header">
             <span class="sender-name">
               {{ msg.sender === 'customer' ? 'You' : (msg.sender === 'admin' ? 'Support Agent' : 'System') }}
@@ -80,13 +85,17 @@
       </div>
 
       <div class="chat-input-area" *ngIf="activeTicket()!.status !== 'Resolved'">
-        <textarea [(ngModel)]="newMessage" placeholder="Type your reply here..." rows="2"
-          (keydown.enter)="$event.preventDefault(); sendMessage()"></textarea>
+        <textarea 
+          [(ngModel)]="newMessage" 
+          placeholder="Type your reply here..." 
+          rows="2"
+          (keydown.enter)="$event.preventDefault(); sendMessage()"
+        ></textarea>
         <button class="btn btn-primary send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
           Send
         </button>
       </div>
-
+      
       <div class="resolved-banner" *ngIf="activeTicket()!.status === 'Resolved'">
         This ticket is resolved. You cannot send new messages.
       </div>
