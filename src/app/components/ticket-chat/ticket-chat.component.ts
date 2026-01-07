@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TicketService } from '../../services/ticket.service';
@@ -13,10 +13,13 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './ticket-chat.component.css'
 })
 export class TicketChatComponent {
+  private ticketService = inject(TicketService);
+  private route = inject(ActivatedRoute);
+
   ticketIdInput = '';
   // Signal to store the ID we are currently tracking
   trackedId = signal('');
-  
+
   // Computed property to find the ticket reactively
   activeTicket = computed(() => {
     const id = this.trackedId();
@@ -27,7 +30,9 @@ export class TicketChatComponent {
   newMessage = '';
   errorMsg = signal('');
 
-  constructor(private ticketService: TicketService, private route: ActivatedRoute) {
+  tickets = this.ticketService.tickets;
+
+  constructor() {
     // Optional: if id is passed in query params
     this.route.queryParams.subscribe(params => {
       if (params['id']) {
@@ -40,7 +45,7 @@ export class TicketChatComponent {
   loadTicket() {
     this.errorMsg.set('');
     if (!this.ticketIdInput.trim()) return;
-    
+
     // Check if it exists first
     const exists = this.ticketService.getTicketById(this.ticketIdInput.trim());
     if (exists) {
@@ -49,6 +54,11 @@ export class TicketChatComponent {
       this.trackedId.set('');
       this.errorMsg.set('Ticket not found. Please check the ID.');
     }
+  }
+
+  selectTicket(id: string) {
+    this.ticketIdInput = id;
+    this.loadTicket();
   }
 
   resetView() {
@@ -65,7 +75,7 @@ export class TicketChatComponent {
       sender: 'customer',
       text: this.newMessage
     });
-    
+
     this.newMessage = '';
   }
 }

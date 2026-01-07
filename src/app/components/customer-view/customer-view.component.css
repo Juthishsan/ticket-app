@@ -78,7 +78,7 @@
   position: absolute;
   top: 2px;
   right: 2px;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   color: white;
   border: none;
   border-radius: 50%;
@@ -98,7 +98,8 @@
 
 .success-message {
   border: 1px solid var(--success);
-  background-color: rgba(16, 185, 129, 0.05); /* very light green */
+  background-color: rgba(16, 185, 129, 0.05);
+  /* very light green */
   padding: 2rem;
   text-align: center;
   margin-top: 2rem;
@@ -135,7 +136,8 @@
   padding: 0.5rem 1rem;
   border-radius: var(--radius-sm);
   display: block;
-  user-select: all; /* Makes it easy to select */
+  user-select: all;
+  /* Makes it easy to select */
 }
 
 .warning-text {
@@ -148,4 +150,14 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .success-actions {
+    flex-direction: column;
+  }
+
+  .success-actions .btn {
+    width: 100%;
+  }
 }
