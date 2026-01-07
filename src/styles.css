@@ -129,18 +129,3 @@ label {
   font-weight: 500;
 }
 
-/* Mobile Responsiveness Globals */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
-  }
-  
-  h1 {
-    font-size: 1.75rem;
-  }
-  
-  .card {
-    padding: 1rem;
-  }
-}
-

@@ -34,8 +34,8 @@
         </label>
       </div>
       
-      <div class="image-previews" *ngIf="images.length > 0">
-        <div class="preview-item" *ngFor="let img of images; let i = index">
+      <div class="image-previews" *ngIf="images().length > 0">
+        <div class="preview-item" *ngFor="let img of images(); let i = index">
           <img [src]="img" alt="Preview">
           <button class="remove-btn" (click)="removeImage(i)">×</button>
         </div>

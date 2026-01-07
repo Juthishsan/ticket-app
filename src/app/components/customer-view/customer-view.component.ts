@@ -16,7 +16,7 @@ export class CustomerViewComponent {
   email = '';
   title = '';
   description = '';
-  images: string[] = [];
+  images = signal<string[]>([]);
   
   isSubmitting = signal(false);
   successMessage = signal('');
@@ -30,7 +30,7 @@ export class CustomerViewComponent {
       for (let i = 0; i < files.length; i++) {
         const reader = new FileReader();
         reader.onload = (e: any) => {
-          this.images.push(e.target.result);
+          this.images.update(imgs => [...imgs, e.target.result]);
         };
         reader.readAsDataURL(files[i]);
       }
@@ -38,7 +38,7 @@ export class CustomerViewComponent {
   }
 
   removeImage(index: number) {
-    this.images.splice(index, 1);
+    this.images.update(imgs => imgs.filter((_, i) => i !== index));
   }
 
   submitTicket() {
@@ -56,7 +56,7 @@ export class CustomerViewComponent {
         email: this.email,
         title: this.title,
         description: this.description,
-        images: this.images
+        images: this.images()
       });
       
       this.isSubmitting.set(false);
@@ -68,7 +68,7 @@ export class CustomerViewComponent {
       this.email = '';
       this.title = '';
       this.description = '';
-      this.images = [];
+      this.images.set([]);
     }, 1000);
   }
 }
