@@ -97,12 +97,55 @@
 }
 
 .success-message {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  border-radius: var(--radius-md);
-  background-color: rgba(16, 185, 129, 0.1);
   border: 1px solid var(--success);
-  color: var(--success);
+  background-color: rgba(16, 185, 129, 0.05); /* very light green */
+  padding: 2rem;
   text-align: center;
+  margin-top: 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   animation: fadeIn 0.3s ease;
+  color: var(--text-main);
+}
+
+.success-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.ticket-id-box {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  display: inline-block;
+  min-width: 300px;
+}
+
+.id-display {
+  margin: 1rem 0;
+}
+
+.id-display code {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: rgba(99, 102, 241, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  display: block;
+  user-select: all; /* Makes it easy to select */
+}
+
+.warning-text {
+  font-size: 0.85rem;
+  color: var(--warning);
+  margin-bottom: 1.5rem;
+}
+
+.success-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }

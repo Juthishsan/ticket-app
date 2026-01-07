@@ -34,20 +34,53 @@ export class TicketService {
     }
   }
 
-  createTicket(data: Omit<Ticket, 'id' | 'status' | 'createdAt'>) {
+  createTicket(data: Omit<Ticket, 'id' | 'status' | 'createdAt' | 'messages'>): string {
     const newTicket: Ticket = {
       ...data,
       id: crypto.randomUUID(),
       status: 'Open',
-      createdAt: new Date() // Note: This will become a string in JSON/LocalStorage cycle if we aren't careful, but standard JS Date serialization is ISO string
+      createdAt: new Date(),
+      messages: [
+        {
+          sender: 'system',
+          text: 'Your query has been submitted. A support agent will review it shortly.',
+          timestamp: new Date()
+        }
+      ]
     };
     
     this.tickets.update(current => [newTicket, ...current]);
+    return newTicket.id;
   }
 
   updateStatus(id: string, status: Ticket['status']) {
     this.tickets.update(current => 
       current.map(t => t.id === id ? { ...t, status } : t)
     );
+  }
+
+  addMessage(ticketId: string, message: { sender: 'customer' | 'admin', text: string }) {
+    this.tickets.update(current => 
+      current.map(t => {
+        if (t.id === ticketId) {
+          return {
+            ...t,
+            messages: [
+              ...t.messages,
+              {
+                sender: message.sender,
+                text: message.text,
+                timestamp: new Date()
+              }
+            ]
+          };
+        }
+        return t;
+      })
+    );
+  }
+
+  getTicketById(id: string): Ticket | undefined {
+    return this.tickets().find(t => t.id === id);
   }
 }

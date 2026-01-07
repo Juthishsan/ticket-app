@@ -1,0 +1,84 @@
+<div class="container fade-in" style="padding-top: 2rem;">
+  
+  <!-- Search Section -->
+  <div class="search-card card" *ngIf="!activeTicket()">
+    <h2>Track Your Ticket</h2>
+    <p class="subtitle">Enter your Ticket ID to view status and chat with support.</p>
+    
+    <div class="search-box">
+      <input type="text" [(ngModel)]="ticketIdInput" placeholder="Enter Ticket ID (e.g. 550e8400-...)">
+      <button class="btn btn-primary" (click)="loadTicket()">Track</button>
+    </div>
+    <p class="error" *ngIf="errorMsg()">{{ errorMsg() }}</p>
+  </div>
+
+  <!-- Chat Interface -->
+  <div class="chat-layout" *ngIf="activeTicket()">
+    
+    <!-- Ticket Info Sidebar -->
+    <div class="ticket-info card">
+      <div class="info-header">
+        <h3>Ticket Details</h3>
+        <span class="status-badge" [ngClass]="activeTicket()!.status.toLowerCase().replace(' ', '-')">
+          {{ activeTicket()!.status }}
+        </span>
+      </div>
+      
+      <div class="info-row">
+        <label>ID:</label>
+        <span>{{ activeTicket()!.id.slice(0, 8) }}...</span>
+      </div>
+      <div class="info-row">
+        <label>Subject:</label>
+        <span>{{ activeTicket()!.title }}</span>
+      </div>
+      <div class="info-row description">
+        <label>Description:</label>
+        <p>{{ activeTicket()!.description }}</p>
+      </div>
+      
+      <button class="btn btn-secondary close-btn" (click)="resetView()">
+        &larr; Check Another
+      </button>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-area card">
+      <div class="messages-list">
+        <div 
+          class="message-bubble" 
+          *ngFor="let msg of activeTicket()!.messages"
+          [ngClass]="{
+            'customer-msg': msg.sender === 'customer',
+            'admin-msg': msg.sender === 'admin',
+            'system-msg': msg.sender === 'system'
+          }"
+        >
+          <div class="msg-header">
+            <span class="sender-name">
+              {{ msg.sender === 'customer' ? 'You' : (msg.sender === 'admin' ? 'Support Agent' : 'System') }}
+            </span>
+            <span class="msg-time">{{ msg.timestamp | date:'shortTime' }}</span>
+          </div>
+          <p class="msg-text">{{ msg.text }}</p>
+        </div>
+      </div>
+
+      <div class="chat-input-area" *ngIf="activeTicket()!.status !== 'Resolved'">
+        <textarea 
+          [(ngModel)]="newMessage" 
+          placeholder="Type your reply here..." 
+          rows="2"
+          (keydown.enter)="$event.preventDefault(); sendMessage()"
+        ></textarea>
+        <button class="btn btn-primary send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+          Send
+        </button>
+      </div>
+      
+      <div class="resolved-banner" *ngIf="activeTicket()!.status === 'Resolved'">
+        This ticket is resolved. You cannot send new messages.
+      </div>
+    </div>
+  </div>
+</div>

@@ -48,8 +48,22 @@
       </button>
     </div>
 
-    <div class="success-message" *ngIf="successMessage()">
-      {{ successMessage() }}
+    <div class="success-message fade-in" *ngIf="successMessage()">
+      <div class="success-icon">✅</div>
+      <h3>{{ successMessage() }}</h3>
+      
+      <div class="ticket-id-box" *ngIf="createdTicketId()">
+        <p>Please save your Ticket ID to track status:</p>
+        <div class="id-display">
+          <code>{{ createdTicketId() }}</code>
+        </div>
+        <p class="warning-text">⚠️ You will need this ID to check updates.</p>
+        
+        <div class="success-actions">
+           <!-- Simple link to track page pre-filled? We can use query params later if needed -->
+           <a routerLink="/track" [queryParams]="{id: createdTicketId()}" class="btn btn-primary btn-sm">Track Now</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

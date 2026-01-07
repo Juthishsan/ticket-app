@@ -61,3 +61,11 @@
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   border-radius: 2px;
 }
+
+.btn-link {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}

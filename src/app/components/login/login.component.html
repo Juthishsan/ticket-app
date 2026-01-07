@@ -1,0 +1,41 @@
+<div class="login-container fade-in">
+  <div class="card login-card">
+    <div class="icon-wrapper">
+      <span class="lock-icon">🔒</span>
+    </div>
+    
+    <h2>Admin Login</h2>
+    <p class="subtitle">Secure access for staff only</p>
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input 
+        type="text" 
+        id="username" 
+        [(ngModel)]="username" 
+        (keyup.enter)="onLogin()"
+        placeholder="Enter username"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input 
+        type="password" 
+        id="password" 
+        [(ngModel)]="password" 
+        (keyup.enter)="onLogin()"
+        placeholder="Enter password"
+      >
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage()">
+      {{ errorMessage() }}
+    </div>
+
+    <button class="btn btn-primary login-btn" (click)="onLogin()" [disabled]="isLoading()">
+      {{ isLoading() ? 'Checking...' : 'Sign In' }}
+    </button>
+  </div>
+</div>

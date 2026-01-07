@@ -53,6 +53,44 @@
             <img *ngFor="let img of ticket.images" [src]="img" alt="Attachment">
           </div>
         </div>
+
+        <!-- Chat Section -->
+        <div class="admin-chat-section">
+          <h4>Ticket Communication</h4>
+          
+          <div class="admin-chat-box">
+             <div class="messages-list">
+              <div 
+                class="message-bubble" 
+                *ngFor="let msg of ticket.messages"
+                [ngClass]="{
+                  'customer-msg': msg.sender === 'customer',
+                  'admin-msg': msg.sender === 'admin',
+                  'system-msg': msg.sender === 'system'
+                }"
+              >
+                <div class="msg-header">
+                  <span class="sender-name">
+                    {{ msg.sender === 'customer' ? ticket.customerName : (msg.sender === 'admin' ? 'You' : 'System') }}
+                  </span>
+                  <span class="msg-time">{{ msg.timestamp | date:'shortTime' }}</span>
+                </div>
+                <p class="msg-text">{{ msg.text }}</p>
+              </div>
+             </div>
+
+             <div class="chat-input-area" *ngIf="ticket.status !== 'Resolved'">
+               <textarea 
+                 [(ngModel)]="newMessage" 
+                 placeholder="Reply to customer..." 
+                 rows="2"
+                 (click)="$event.stopPropagation()"
+                 (keydown.enter)="$event.preventDefault(); sendMessage(ticket.id)"
+               ></textarea>
+               <button class="btn btn-primary send-btn" (click)="sendMessage(ticket.id); $event.stopPropagation()">Send</button>
+             </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -6,7 +6,14 @@
     </div>
     <div class="nav-links">
       <a routerLink="/customer" routerLinkActive="active" class="nav-link">Raise Ticket</a>
-      <a routerLink="/admin" routerLinkActive="active" class="nav-link">Admin Dashboard</a>
+      <a routerLink="/track" routerLinkActive="active" class="nav-link">Track Ticket</a>
+      
+      @if (isAuthenticated()) {
+        <a routerLink="/admin" routerLinkActive="active" class="nav-link">Admin Dashboard</a>
+        <button (click)="logout()" class="nav-link btn-link">Logout</button>
+      } @else {
+        <a routerLink="/login" routerLinkActive="active" class="nav-link">Admin Login</a>
+      }
     </div>
   </div>
 </nav>

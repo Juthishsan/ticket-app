@@ -1,13 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TicketService } from '../../services/ticket.service';
 
 @Component({
   selector: 'app-customer-view',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './customer-view.component.html',
   styleUrl: './customer-view.component.css'
 })
@@ -20,6 +20,7 @@ export class CustomerViewComponent {
   
   isSubmitting = signal(false);
   successMessage = signal('');
+  createdTicketId = signal(''); // Store the ID of the newly created ticket
 
   constructor(private ticketService: TicketService, private router: Router) {}
 
@@ -50,7 +51,7 @@ export class CustomerViewComponent {
     
     // Simulate delay for effect
     setTimeout(() => {
-      this.ticketService.createTicket({
+      const newId = this.ticketService.createTicket({
         customerName: this.customerName,
         email: this.email,
         title: this.title,
@@ -59,7 +60,8 @@ export class CustomerViewComponent {
       });
       
       this.isSubmitting.set(false);
-      this.successMessage.set('Ticket raised successfully! Check the Admin View.');
+      this.createdTicketId.set(newId);
+      this.successMessage.set('Ticket raised successfully!');
       
       // Reset form
       this.customerName = '';
@@ -67,9 +69,6 @@ export class CustomerViewComponent {
       this.title = '';
       this.description = '';
       this.images = [];
-      
-      // Optional: Redirect or just show message
-      // setTimeout(() => this.successMessage.set(''), 3000);
     }, 1000);
   }
 }
